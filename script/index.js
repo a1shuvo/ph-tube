@@ -1,3 +1,23 @@
+// Showing Loaders
+const showLoader = () => {
+    document.getElementById("loader").classList.remove("hidden");
+    document.getElementById("video-container").classList.add("hidden");
+};
+
+// Hiding Loaders
+const hideLoader = () => {
+    document.getElementById("loader").classList.add("hidden");
+    document.getElementById("video-container").classList.remove("hidden");
+};
+
+// Remove Active Class Category Button
+function removeActiveClass() {
+    const activeButtons = document.getElementsByClassName("active");
+    for (const btn of activeButtons) {
+        btn.classList.remove("active");
+    };
+};
+
 // Load Categories with fetch and send to displayCategories
 function loadCategories() {
     fetch("https://openapi.programming-hero.com/api/phero-tube/categories")
@@ -6,7 +26,8 @@ function loadCategories() {
 };
 
 // Load videos and Send to displayVideos
-function loadVideos(searchText="") {
+function loadVideos(searchText = "") {
+    showLoader();
     fetch(`https://openapi.programming-hero.com/api/phero-tube/videos?title=${searchText}`)
         .then((res) => res.json())
         .then((data) => {
@@ -18,6 +39,7 @@ function loadVideos(searchText="") {
 
 // Load Categoy Wise Videos and display Videos
 const loadCategoryVideos = (id) => {
+    showLoader();
     const url = `https://openapi.programming-hero.com/api/phero-tube/category/${id}`;
     fetch(url).then(res => res.json()).then(data => {
         removeActiveClass();
@@ -25,7 +47,6 @@ const loadCategoryVideos = (id) => {
         clickedButton.classList.add("active");
         displayVideos(data.category);
     });
-
 };
 
 // Load Video Details with Video ID and send to Video Details
@@ -36,13 +57,6 @@ const loadVideoDetails = (videoId) => {
     });
 };
 
-// Remove Active Class Category Button
-function removeActiveClass() {
-    const activeButtons = document.getElementsByClassName("active");
-    for (const btn of activeButtons) {
-        btn.classList.remove("active");
-    };
-};
 
 // Display Video Details
 const displayVideoDetails = (video) => {
@@ -67,7 +81,6 @@ const displayVideoDetails = (video) => {
     `;
 };
 
-
 // Dynamically Display Catrgory Buttons
 function displayCategories(categories) {
     const categoryContainer = document.getElementById("category-container");
@@ -82,7 +95,7 @@ function displayCategories(categories) {
 
 // Dynamically Display Videos
 const displayVideos = (videos) => {
-    const videoContainer = document.getElementById("video-conatainer");
+    const videoContainer = document.getElementById("video-container");
     videoContainer.innerHTML = "";
     // When Category Wise Videos empty
     if (videos.length === 0) {
@@ -92,6 +105,7 @@ const displayVideos = (videos) => {
             <h2 class="text-2xl font-bold text-center">Oops!! Sorry, There is no content here.</h2>
         </div>
         `;
+        hideLoader();
         return;
     }
     videos.forEach(video => {
@@ -128,13 +142,15 @@ const displayVideos = (videos) => {
         `;
         videoContainer.append(videoCard);
     });
+    hideLoader();
 
 };
 
+// Add Search Functionality
 document.getElementById("search-input").addEventListener("keyup", (e) => {
     const input = e.target.value;
     loadVideos(input);
-
 });
+
 loadCategories();
 loadVideos();

@@ -33,12 +33,12 @@
     <!-- Category Navbar -->
     <nav id="category-container" class="flex py-5 justify-center gap-5">
         <div>
-            <button id="btn-all" onclick="loadVideos()" class="btn btn-sm">All</button>
+            <button id="btn-all" onclick=loadVideos() class="btn btn-sm">All</button>
         </div>
     </nav>
 
     <!-- Videos Section -->
-     <section id="video-conatainer" class="w-11/12 mx-auto grid grid-cols-4 gap-5">
+    <section id="video-conatainer" class="w-11/12 mx-auto grid grid-cols-4 gap-5">
 
         <!-- Empty Content -->
         <div class="col-span-full py-20">
@@ -46,7 +46,23 @@
             <h2 class="text-2xl font-bold text-center">Oops!! Sorry, There is no content here.</h2>
         </div>
 
-     </section>
+    </section>
+
+    <!-- Open the modal using ID.showModal() method -->
+    <!-- <button class="btn" onclick="video_details.showModal()">open modal</button> -->
+    <dialog id="video_details" class="modal modal-bottom sm:modal-middle">
+        <div class="modal-box">
+            <div id="details-container">
+
+            </div>
+            <div class="modal-action">
+                <form method="dialog">
+                    <!-- if there is a button in form, it will close the modal -->
+                    <button class="btn">Close</button>
+                </form>
+            </div>
+        </div>
+    </dialog>
 
     <!-- Javascript Added -->
     <script src="./script/index.js"></script>

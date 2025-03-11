@@ -3,7 +3,7 @@ function loadCategories() {
     fetch("https://openapi.programming-hero.com/api/phero-tube/categories")
         .then((res) => res.json())
         .then((data) => displayCategories(data.categories));
-}
+};
 
 // Load videos and Send to displayVideos
 function loadVideos() {
@@ -14,7 +14,7 @@ function loadVideos() {
             document.getElementById("btn-all").classList.add("active");
             displayVideos(data.videos);
         });
-}
+};
 
 // Load Categoy Wise Videos and display Videos
 const loadCategoryVideos = (id) => {
@@ -26,15 +26,46 @@ const loadCategoryVideos = (id) => {
         displayVideos(data.category);
     });
 
-}
+};
+
+// Load Video Details with Video ID and send to Video Details
+const loadVideoDetails = (videoId) => {
+    const url = `https://openapi.programming-hero.com/api/phero-tube/video/${videoId}`;
+    fetch(url).then(res => res.json()).then(data => {
+        displayVideoDetails(data.video);
+    });
+};
 
 // Remove Active Class Category Button
 function removeActiveClass() {
     const activeButtons = document.getElementsByClassName("active");
     for (const btn of activeButtons) {
         btn.classList.remove("active");
-    }
-}
+    };
+};
+
+// Display Video Details
+const displayVideoDetails = (video) => {
+    document.getElementById("video_details").showModal();
+    const detailsContainer = document.getElementById("details-container");
+    detailsContainer.innerHTML = `
+    <div class="card bg-base-100 image-full shadow-sm">
+    <figure>
+        <img
+        src="${video.thumbnail}"
+        alt="Movie" />
+    </figure>
+    <div class="card-body">
+        <h2 class="card-title">${video.title}</h2>
+        <div class="flex gap-3 items-center py-2">
+            <img class="w-8 h-8 rounded-full ring-2 object-cover" src="${video.authors[0].profile_picture}" />
+            <span class="font-bold">${video.authors[0].profile_name}</span>
+        </div>
+        <p>${video.description}</p>
+    </div>
+    </div>
+    `;
+};
 
 
 // Dynamically Display Catrgory Buttons
@@ -47,7 +78,7 @@ function displayCategories(categories) {
         `;
         categoryContainer.appendChild(categoryDiv);
     }
-}
+};
 
 // Dynamically Display Videos
 const displayVideos = (videos) => {
@@ -90,11 +121,12 @@ const displayVideos = (videos) => {
                 <p class="text-sm text-gray-400">${video.others.views} views</p>
               </div>
             </div>
+            <button onclick=loadVideoDetails("${video.video_id}") class="btn btn-block">Show Details</button>
           </div>
         `;
         videoContainer.append(videoCard);
     });
 
-}
+};
 
 loadCategories();

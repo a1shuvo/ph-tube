@@ -5,11 +5,18 @@ function loadCategories() {
         .then((data) => displayCategories(data.categories));
 }
 
-// Load videos
+// Load videos and Send to displayVideos
 function loadVideos() {
     fetch("https://openapi.programming-hero.com/api/phero-tube/videos")
         .then((res) => res.json())
         .then((data) => displayVideos(data.videos));
+}
+
+// Load Categoy Wise Videos and display Videos
+const loadCategoryVideos = (id) => {
+    const url = `https://openapi.programming-hero.com/api/phero-tube/category/${id}`;
+    fetch(url).then(res => res.json()).then(data => displayVideos(data.category));
+
 }
 
 // Dynamically Display Catrgory Buttons
@@ -18,7 +25,7 @@ function displayCategories(categories) {
     for (const cat of categories) {
         const categoryDiv = document.createElement("div");
         categoryDiv.innerHTML = `
-        <button class="btn btn-sm hover:bg-[#FF1F3D] hover:text-white">${cat.category}</button>
+        <button onclick="loadCategoryVideos(${cat.category_id})" class="btn btn-sm hover:bg-[#FF1F3D] hover:text-white">${cat.category}</button>
         `;
         categoryContainer.appendChild(categoryDiv);
     }
@@ -27,6 +34,7 @@ function displayCategories(categories) {
 // Dynamically Display Videos
 const displayVideos = (videos) => {
     const videoContainer = document.getElementById("video-conatainer");
+    videoContainer.innerHTML = "";
     videos.forEach(video => {
         const videoCard = document.createElement("div");
         videoCard.innerHTML = `
@@ -62,4 +70,3 @@ const displayVideos = (videos) => {
 }
 
 loadCategories();
-loadVideos();

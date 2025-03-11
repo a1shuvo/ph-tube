@@ -152,5 +152,41 @@ document.getElementById("search-input").addEventListener("keyup", (e) => {
     loadVideos(input);
 });
 
+// Parse Views String to Number
+function parseViews(views) {
+    // Check for 'K' or 'k' (thousands)
+    if (views.toUpperCase().endsWith('K')) {
+        const numericPart = parseFloat(views.slice(0, -1));
+        return numericPart * 1000;
+    }
+
+    // Check for 'M' or 'm' (millions)
+    if (views.toUpperCase().endsWith('M')) {
+        const numericPart = parseFloat(views.slice(0, -1));
+        return numericPart * 1000000;
+    }
+
+    // If it's a simple number, parse it directly
+    return parseInt(views, 10);
+}
+
+// Sort by View Functionality
+document.getElementById("sort-by-view").addEventListener("click", () => {
+    fetch(`https://openapi.programming-hero.com/api/phero-tube/videos`)
+        .then((res) => res.json())
+        .then((data) => {
+            removeActiveClass();
+            document.getElementById("btn-all").classList.add("active");
+            const sortVideos = data.videos.sort((a, b) => {
+                let x = parseViews(a.others.views);
+                let y = parseViews(b.others.views);
+                return x < y ? 1 : x > y ? -1 : 0;
+            });
+            // const sortVideos = data.videos.sort((a, b) => Math.sign(parseViews(b.others.views) - parseViews(a.others.views)));
+
+            displayVideos(sortVideos);
+        });
+});
+
 loadCategories();
 loadVideos();
